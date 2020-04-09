@@ -21,10 +21,12 @@ class SignInPage extends StatelessWidget {
             ],
           ),
           RaisedButton(
+            key: Key('Log In Button'),
             onPressed: () => LoginPageBuilder.show(context),
             child: Text("Log In"),
           ),
           RaisedButton(
+            key: Key('Register Button'),
             onPressed: () => RegisterPageBuilder.show(context),
             child: Text("Register"),
           )

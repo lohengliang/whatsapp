@@ -12,7 +12,7 @@ import 'package:whatsup/firebase_database.dart';
 void main() {
   group('message from map test', () {
     // Build our app and trigger a frame.
-    test('sample message', () {
+    test('creating sample message', () {
       final message = Message.fromMap({
         'content': 'This is a test message.',
         'timeCreated': Timestamp.fromMillisecondsSinceEpoch(123456789),
@@ -27,6 +27,24 @@ void main() {
               timeCreated: Timestamp.fromMillisecondsSinceEpoch(123456789),
               userId: "ABC123",
               displayName: "testUser123"));
+    });
+  });
+
+  group('message to JSON test', () {
+    // Build our app and trigger a frame.
+    test('creating JSON from sample message', () {
+      final message = Message.fromMap({
+        'content': 'This is a test message.',
+        'timeCreated': Timestamp.fromMillisecondsSinceEpoch(123456789),
+        'userId': "ABC123",
+        'displayName': "testUser123"
+      }, 'id123');
+      expect(message.toJson(), {
+        'content': 'This is a test message.',
+        'timeCreated': Timestamp.fromMillisecondsSinceEpoch(123456789),
+        'userId': "ABC123",
+        'displayName': "testUser123"
+      });
     });
   });
 }

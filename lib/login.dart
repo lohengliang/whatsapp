@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
               padding: EdgeInsets.all(8.0),
               child: TextField(
+                key: Key("Email Input"),
                 keyboardType: TextInputType.emailAddress,
                 onChanged: model.updateEmail,
                 decoration: InputDecoration(
@@ -72,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
               padding: EdgeInsets.all(8.0),
               child: TextField(
+                key: Key("Password Input"),
                 autocorrect: false,
                 obscureText: true,
                 onChanged: model.updatePassword,
@@ -83,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
               padding: EdgeInsets.all(8.0),
               child: RaisedButton(
+                key: Key("Login Button"),
                 onPressed: model.isLoading ? null : _submit,
                 child: Text("Login"),
               ))
