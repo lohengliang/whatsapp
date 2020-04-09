@@ -15,6 +15,7 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   final TextEditingController textEditingController =
       new TextEditingController();
+  final ScrollController listScrollController = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,8 @@ class _MessagesPageState extends State<MessagesPage> {
       padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
       children:
           data.map((message) => _buildListItem(context, message)).toList(),
+      controller: listScrollController,
+      reverse: true,
     );
   }
 
@@ -171,5 +174,7 @@ class _MessagesPageState extends State<MessagesPage> {
         displayName: user.displayName);
     textEditingController.clear();
     await database.addMessage(message.toJson());
+    listScrollController.animateTo(0.0,
+        duration: Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 }

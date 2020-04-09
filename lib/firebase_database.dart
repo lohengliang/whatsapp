@@ -18,7 +18,7 @@ class FirebaseDatabase {
 
   Stream<List<Message>> fetchMessagesAsStream() {
     final Stream<QuerySnapshot> snapshots =
-        messagesRef.orderBy('timeCreated', descending: false).snapshots();
+        messagesRef.orderBy('timeCreated', descending: true).snapshots();
     return snapshots.map((snapshot) {
       final result = snapshot.documents
           .map(
