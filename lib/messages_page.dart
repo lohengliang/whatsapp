@@ -64,6 +64,7 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Widget _buildLeftListItem(BuildContext context, Message message) {
+    double widthOfScreen = MediaQuery.of(context).size.width;
     return Row(children: <Widget>[
       Container(
         child: Column(children: <Widget>[
@@ -77,7 +78,7 @@ class _MessagesPageState extends State<MessagesPage> {
               child:
                   Text(message.content, style: TextStyle(color: Colors.black))),
           Container(
-              width: 200,
+              width: widthOfScreen / 2,
               child: Text(
                   DateFormat.yMd()
                       .add_jm()
@@ -86,7 +87,7 @@ class _MessagesPageState extends State<MessagesPage> {
                   textAlign: TextAlign.right))
         ], crossAxisAlignment: CrossAxisAlignment.start),
         padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-        width: 200.0,
+        width: widthOfScreen / 2,
         decoration: BoxDecoration(
             color: Colors.grey[100], borderRadius: BorderRadius.circular(8.0)),
         margin: EdgeInsets.only(bottom: 10.0, right: 10.0),
@@ -95,31 +96,42 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Widget _buildRightListItem(BuildContext context, Message message) {
+    double widthOfScreen = MediaQuery.of(context).size.width;
     return Container(
       child: Column(children: <Widget>[
         Row(children: <Widget>[
           Container(
-            child: Column(children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Text(message.content,
-                      style: TextStyle(color: Colors.black))),
+            child: Row(children: <Widget>[
+              Column(children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Text(message.content,
+                        style: TextStyle(color: Colors.black))),
+                Container(
+                    width: widthOfScreen / 2 - 45,
+                    child: Text(
+                        DateFormat.yMd()
+                            .add_jm()
+                            .format(message.timeCreated.toDate()),
+                        style: TextStyle(color: Colors.grey[700]),
+                        textAlign: TextAlign.right))
+              ], crossAxisAlignment: CrossAxisAlignment.start),
               Container(
-                  width: 200,
-                  child: Text(
-                      DateFormat.yMd()
-                          .add_jm()
-                          .format(message.timeCreated.toDate()),
-                      style: TextStyle(color: Colors.grey[700]),
-                      textAlign: TextAlign.right))
-            ], crossAxisAlignment: CrossAxisAlignment.start),
+                  child: new IconButton(
+                    color: Colors.grey,
+                    iconSize: 25,
+                    icon: new Icon(Icons.delete_outline),
+                    onPressed: () => _deleteMessage(context, message.id),
+                  ),
+                  decoration: BoxDecoration(color: Colors.transparent))
+            ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
             padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-            width: 200.0,
+            width: widthOfScreen / 2 + 40,
             decoration: BoxDecoration(
                 color: Colors.lightGreen[100],
                 borderRadius: BorderRadius.circular(8.0)),
             margin: EdgeInsets.only(bottom: 10.0, left: 10.0),
-          )
+          ),
         ], mainAxisAlignment: MainAxisAlignment.end)
       ]),
     );
@@ -174,6 +186,13 @@ class _MessagesPageState extends State<MessagesPage> {
         displayName: user.displayName);
     textEditingController.clear();
     await database.addMessage(message.toJson());
+    listScrollController.animateTo(0.0,
+        duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+  }
+
+  Future<void> _deleteMessage(BuildContext context, String id) async {
+    final database = Provider.of<FirebaseDatabase>(context, listen: false);
+    await database.removeMessage(id);
     listScrollController.animateTo(0.0,
         duration: Duration(milliseconds: 300), curve: Curves.easeOut);
   }
